@@ -11,11 +11,23 @@ public class PlayerScript : MonoBehaviour
 
     public float jumpForce;
     
+    public float lives;
+
     public Text score;
 
     public Text jumpText;
 
     public Text hozText;
+
+    public Text winText;
+
+    public AudioClip defultmusic;
+
+    public AudioClip winmusic;
+
+    public AudioSource musicSource;
+
+    public Text livesText;
 
     private int scoreValue = 0;
 
@@ -34,6 +46,11 @@ public class PlayerScript : MonoBehaviour
     {
         rd2d = GetComponent<Rigidbody2D>();
         score.text = scoreValue.ToString();
+        lives = 3;
+        livesText.text = "Lives: " + lives;
+        musicSource.clip = defultmusic;
+        musicSource.Play();
+        musicSource.loop = true;
     }
 
     // Update is called once per frame
@@ -94,6 +111,20 @@ public class PlayerScript : MonoBehaviour
             scoreValue += 1;
             score.text = scoreValue.ToString();
             Destroy(collision.collider.gameObject);
+            WinCheck();
+                if (scoreValue == 4)
+                {
+                transform.position = new Vector2(56.0f, 1.0f);
+                lives=3;
+                SetLivesText ();
+                }
+        }
+
+        if (collision.collider.tag == "Enemy")
+        {
+        lives = lives - 1;
+        Destroy(collision.collider.gameObject);
+        SetLivesText();
         }
 
     }
@@ -106,6 +137,29 @@ public class PlayerScript : MonoBehaviour
             {
                 rd2d.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             }
+            
+        }
+        
+    }
+
+    
+        void WinCheck ()
+    {
+        if (scoreValue >= 8)
+        {
+            winText.text = "You Win!!!\nBy Danielle Brewer";
+            musicSource.clip = winmusic;
+            musicSource.Play();
+            musicSource.loop = false;
+        }
+    }
+         void SetLivesText ()
+    {
+        livesText.text= "Lives: " + lives.ToString ();
+        if (lives == 0)
+        {
+            winText.text= "You Lose!!! \nBy Danielle Brewer";
+            Destroy(gameObject);
         }
     }
 }
