@@ -27,6 +27,8 @@ public class PlayerScript : MonoBehaviour
 
     public AudioSource musicSource;
 
+    Animator anim;
+
     public Text livesText;
 
     private int scoreValue = 0;
@@ -51,6 +53,45 @@ public class PlayerScript : MonoBehaviour
         musicSource.clip = defultmusic;
         musicSource.Play();
         musicSource.loop = true;
+        anim = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        /*if (Input.GetKey(KeyCode.W))
+        {
+            anim.SetInteger("State", 2);
+        }
+        else*/ if (isOnGround == false)
+        {
+            anim.SetInteger("State", 3);
+        }
+       else if (Input.GetKey(KeyCode.D))
+       {
+           anim.SetInteger("State", 1);
+       }
+       else if (Input.GetKey(KeyCode.A))
+       {
+           anim.SetInteger("State", 1); 
+       }
+       else if (Input.GetKey(KeyCode.LeftArrow))
+       {
+           anim.SetInteger("State", 1);
+       }
+       else if (Input.GetKey(KeyCode.RightArrow))
+        {
+          anim.SetInteger("State", 1);
+        }
+        else
+        {
+          anim.SetInteger("State", 0);
+        }
+
+        //if (isOnGround == false)
+        //{
+        //    anim.SetInteger("State",3);
+        //}
+
     }
 
     // Update is called once per frame
@@ -60,6 +101,8 @@ public class PlayerScript : MonoBehaviour
         float vertMovement = Input.GetAxis("Vertical");
         rd2d.AddForce(new Vector2(hozMovement * speed, vertMovement * speed));
         isOnGround = Physics2D.OverlapCircle(groundcheck.position, checkRadius, allGround);
+
+
 
         if (facingRight == false && hozMovement > 0)
         {
@@ -137,7 +180,6 @@ public class PlayerScript : MonoBehaviour
             {
                 rd2d.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             }
-            
         }
         
     }
